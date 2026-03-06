@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterMotor))]
 public class PlayerController : MonoBehaviour
 {
-	[SerializeField] private InputReader _input;
+	private ICharacterInputReader _input;
 
 	private CharacterMotor _motor;
 
@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 	private void Awake()
 	{
 		_motor = GetComponent<CharacterMotor>();
+		_input = InputManager.Instance.GetPlayerInput();
 	}
 
 	private void OnEnable()

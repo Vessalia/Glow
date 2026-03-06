@@ -1,73 +1,34 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[CreateAssetMenu(fileName = "InputReader", menuName = "Scriptable Objects/InputReader")]
-public class InputReader : ScriptableObject, GameInputActions.IPlayerActions, GameInputActions.IUIActions
+public class PlayerInputReader : ICharacterInputReader, GameInputActions.IPlayerActions
 {
-	// ── Player events ──────────────────────────────────────────────────────────
 	public event Action<Vector2> MoveEvent;
 	public event Action<Vector2> LookEvent;
-
 	public event Action JumpStartedEvent;
 	public event Action JumpCancelledEvent;
-
 	public event Action AttackStartedEvent;
 	public event Action AttackCancelledEvent;
-
 	public event Action AimStartedEvent;
 	public event Action AimCancelledEvent;
-
 	public event Action CrouchStartedEvent;
 	public event Action CrouchCancelledEvent;
-
 	public event Action SprintStartedEvent;
 	public event Action SprintCancelledEvent;
-
 	public event Action InteractEvent;
 	public event Action PauseEvent;
-
 	public event Action<Cycle> CycleEvent;
 
-	// ── UI events ─────────────────────────────────────────────────────────────
-	public event Action<Vector2> NavigateEvent;
-	public event Action SubmitEvent;
-	public event Action CancelEvent;
+	private Action OnEnable;
+	private Action OnDisable;
 
-	private GameInputActions _actions;
-
-	// ── Lifecycle ─────────────────────────────────────────────────────────────
-
-	private void OnEnable()
+	public PlayerInputReader(GameInputActions actions)
 	{
-		if (_actions == null)
-		{
-			_actions = new GameInputActions();
-			_actions.Player.SetCallbacks(this);
-			_actions.UI.SetCallbacks(this);
-		}
+		OnEnable = () => actions.Player.Enable();
+		OnDisable = () => actions.Player.Disable();
 
-		EnablePlayerInput();   // start in gameplay mode
-	}
-
-	private void OnDisable()
-	{
-		_actions.Player.Disable();
-		_actions.UI.Disable();
-	}
-
-	// ── Map switching (call from your GameStateManager / pause logic) ──────────
-
-	public void EnablePlayerInput()
-	{
-		_actions.Player.Enable();
-		_actions.UI.Disable();
-	}
-
-	public void EnableUIInput()
-	{
-		_actions.Player.Disable();
-		_actions.UI.Enable();
+		actions.Player.SetCallbacks(this);
 	}
 
 	// ── IPlayerActions callbacks ───────────────────────────────────────────────
@@ -132,20 +93,8 @@ public class InputReader : ScriptableObject, GameInputActions.IPlayerActions, Ga
 		if (ctx.started) CycleEvent?.Invoke(Cycle.Next);
 	}
 
-	// ── IUIActions callbacks ───────────────────────────────────────────────────
+	public void Enable() => OnEnable?.Invoke();
 
-	public void OnNavigate(InputAction.CallbackContext ctx)
-	{
-		if (ctx.performed) NavigateEvent?.Invoke(ctx.ReadValue<Vector2>());
-	}
-
-	public void OnSubmit(InputAction.CallbackContext ctx)
-	{
-		if (ctx.started) SubmitEvent?.Invoke();
-	}
-
-	public void OnCancel(InputAction.CallbackContext ctx)
-	{
-		if (ctx.started) CancelEvent?.Invoke();
-	}
+	public void Disable() => OnDisable?.Invoke();
 }
+

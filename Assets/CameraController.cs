@@ -31,8 +31,7 @@ public class CameraController : MonoBehaviour
 	[SerializeField] private Vector3 _aimOffset = new Vector3(0.3f, 0f, -1.5f);
 	[SerializeField] private float _aimLerpSpeed = 10f;
 
-	[Header("Input")]
-	[SerializeField] private InputReader _input;
+	private ICharacterInputReader _input;
 
 	// Current yaw and pitch angles (degrees).
 	private float _yaw;
@@ -75,10 +74,13 @@ public class CameraController : MonoBehaviour
 		// Initialise yaw from the character's current facing so the camera
 		// doesn't snap on the first frame.
 		_yaw = transform.eulerAngles.y;
+		
 	}
 
 	private void OnEnable()
 	{
+		_input = InputManager.Instance.GetPlayerInput();
+
 		_input.LookEvent += OnLook;
 		_input.AimStartedEvent += OnAimStarted;
 		_input.AimCancelledEvent += OnAimCancelled;
