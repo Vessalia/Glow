@@ -17,7 +17,7 @@ public struct CharacterIntent
 
 	public bool InteractPressed;
 	public bool AttackPressed;
-	public bool AttackHeld;   
+	public bool AttackHeld;
 	
 	public bool IsCrouching;
 	public bool IsSprinting;
