@@ -6,7 +6,6 @@ public class CameraController : MonoBehaviour
 	[Header("Rig References")]
 	[SerializeField] private Transform _pivot;     // child of Player, yaws
 	[SerializeField] private Transform _arm;       // child of Pivot, pitches
-	[SerializeField] private Transform _socket;    // child of Arm, holds offset
 	[SerializeField] private Camera _camera;       // child of Socket
 
 	[Header("Sensitivity")]
@@ -18,18 +17,10 @@ public class CameraController : MonoBehaviour
 	[SerializeField] private float _pitchMin = -40f;
 	[SerializeField] private float _pitchMax = 70f;
 
-	[Header("Collision")]
-	[SerializeField] private float _collisionRadius = 0.2f;
-	[SerializeField] private LayerMask _collisionMask;
 
 	[Header("Look Target")]
 	[SerializeField] private Transform _lookTarget;         // assign e.g. a chest bone, or leave null
 	[SerializeField] private float _lookTargetDistance = 50f; // fallback: point this far along arm forward
-
-	[Header("Aim")]
-	[SerializeField] private Vector3 _defaultOffset = new Vector3(0.6f, 0f, -3.0f);
-	[SerializeField] private Vector3 _aimOffset = new Vector3(0.3f, 0f, -1.5f);
-	[SerializeField] private float _aimLerpSpeed = 10f;
 
 	private ICharacterInputReader _input;
 
@@ -97,8 +88,6 @@ public class CameraController : MonoBehaviour
 	{
 		// Run in LateUpdate so the camera settles after the motor has moved.
 		ApplyRotation();
-		ApplyOffset();
-		ApplyCollision();
 	}
 
 	// ── Private ────────────────────────────────────────────────────────────────
@@ -113,43 +102,6 @@ public class CameraController : MonoBehaviour
 		_arm.localRotation = Quaternion.Euler(_pitch, 0f, 0f);
 	}
 
-	private void ApplyOffset()
-	{
-		// Lerp the socket's local position between default and aim offsets.
-		Vector3 targetOffset = _isAiming ? _aimOffset : _defaultOffset;
-		_socket.localPosition = Vector3.Lerp(
-			_socket.localPosition,
-			targetOffset,
-			_aimLerpSpeed * Time.deltaTime
-		);
-	}
-
-	private void ApplyCollision()
-	{
-		Vector3 desiredPos = _socket.position;
-		Vector3 origin = _arm.position;
-		Vector3 direction = (desiredPos - origin).normalized;
-		float desiredDist = Vector3.Distance(origin, desiredPos);
-
-		Vector3 finalCameraPos;
-		if (Physics.SphereCast(origin, _collisionRadius, direction,
-							   out RaycastHit hit, desiredDist, _collisionMask))
-		{
-			finalCameraPos = origin + direction * (hit.distance - _collisionRadius);
-		}
-		else
-		{
-			finalCameraPos = desiredPos;
-		}
-
-		_camera.transform.position = finalCameraPos;
-
-		// Orient the camera toward the look point rather than just copying the
-		// arm's rotation — this is what actually makes the camera feel grounded.
-		Vector3 toTarget = LookPoint - finalCameraPos;
-		if (toTarget.sqrMagnitude > 0.001f)
-			_camera.transform.rotation = Quaternion.LookRotation(toTarget.normalized, Vector3.up);
-	}
 
 	// ── Input handlers ─────────────────────────────────────────────────────────
 

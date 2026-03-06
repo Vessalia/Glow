@@ -17,9 +17,7 @@ public class CharacterMotor
 	[SerializeField] private float _jumpHoldMaxTime = 0.25f;
 
 	[Header("Looking")]
-	[SerializeField] private float _lookSensitivity = 0.15f;
-	[SerializeField] private Transform _cameraPivot; // assign the camera's parent transform
-	[SerializeField] private Camera _cam; // assign the camera's parent transform
+	[SerializeField] private Camera _cam;
 
 	[SerializeField]
 	private CharacterController _cc;
@@ -34,7 +32,6 @@ public class CharacterMotor
 	/// Called by PlayerController or an AI brain each FixedUpdate.
 	public void ApplyIntent(CharacterIntent intent)
 	{
-		HandleLook(intent.LookDelta);
 		HandleMovement(intent.MoveDirection);
 		HandleJump(intent.JumpPressed, intent.JumpHeld);
 		ApplyGravity();
@@ -43,20 +40,6 @@ public class CharacterMotor
 	}
 
 	// ── Private movement helpers ───────────────────────────────────────────────
-
-	private void HandleLook(Vector2 delta)
-	{
-		if (delta == Vector2.zero || _cameraPivot == null)
-			return;
-
-		// Horizontal: rotate the whole character so movement stays relative.
-		_cc.transform.Rotate(Vector3.up, delta.x * _lookSensitivity, Space.World);
-
-		// Vertical: tilt only the camera pivot, clamped to avoid flipping.
-		float pitch = _cameraPivot.localEulerAngles.x - delta.y * _lookSensitivity;
-		pitch = ClampAngle(pitch, -80f, 80f);
-		_cameraPivot.localEulerAngles = new Vector3(pitch, 0f, 0f);
-	}
 
 	private void HandleMovement(Vector2 moveDir)
 	{

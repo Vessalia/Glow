@@ -210,7 +210,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2049038020}
+  m_Father: {fileID: 1113848989}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
@@ -604,7 +604,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2049038020}
+  - {fileID: 330585546}
   m_Father: {fileID: 2089539298}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1482673468
@@ -650,8 +650,6 @@ MonoBehaviour:
     _jumpHeight: 0
     _jumpHoldBonus: 0
     _jumpHoldMaxTime: 0
-    _lookSensitivity: 0
-    _cameraPivot: {fileID: 0}
     _cam: {fileID: 0}
     _cc: {fileID: 1482673471}
 --- !u!143 &1482673471
@@ -935,8 +933,6 @@ MonoBehaviour:
     _jumpHeight: 3
     _jumpHoldBonus: 1
     _jumpHoldMaxTime: 1
-    _lookSensitivity: 0
-    _cameraPivot: {fileID: 2089539298}
     _cam: {fileID: 330585545}
     _cc: {fileID: 1693229689}
 --- !u!114 &1693229696
@@ -953,7 +949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   _pivot: {fileID: 2089539298}
   _arm: {fileID: 1113848989}
-  _socket: {fileID: 2049038020}
+  _socket: {fileID: 0}
   _camera: {fileID: 330585545}
   _yawSensitivity: 0.15
   _pitchSensitivity: 0.15
@@ -966,41 +962,6 @@ MonoBehaviour:
     m_Bits: 0
   _lookTarget: {fileID: 736730469}
   _lookTargetDistance: 50
-  _defaultOffset: {x: 0.6, y: 0, z: -3}
-  _aimOffset: {x: 0.3, y: 0, z: -1.5}
-  _aimLerpSpeed: 10
---- !u!1 &2049038019
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2049038020}
-  m_Layer: 0
-  m_Name: Camera Socket
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2049038020
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2049038019}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 330585546}
-  m_Father: {fileID: 1113848989}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2089539297
 GameObject:
   m_ObjectHideFlags: 0
