@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -18,6 +19,7 @@ public class CharacterMotor
 	[Header("Looking")]
 	[SerializeField] private float _lookSensitivity = 0.15f;
 	[SerializeField] private Transform _cameraPivot; // assign the camera's parent transform
+	[SerializeField] private Camera _cam; // assign the camera's parent transform
 
 	[SerializeField]
 	private CharacterController _cc;
@@ -44,7 +46,8 @@ public class CharacterMotor
 
 	private void HandleLook(Vector2 delta)
 	{
-		if (delta == Vector2.zero || _cameraPivot == null) return;
+		if (delta == Vector2.zero || _cameraPivot == null)
+			return;
 
 		// Horizontal: rotate the whole character so movement stays relative.
 		_cc.transform.Rotate(Vector3.up, delta.x * _lookSensitivity, Space.World);
@@ -57,11 +60,23 @@ public class CharacterMotor
 
 	private void HandleMovement(Vector2 moveDir)
 	{
-		// Build a world-space target velocity aligned to the character's facing.
-		Vector3 worldMove = _cc.transform.right * moveDir.x
-						  + _cc.transform.forward * moveDir.y;
-		worldMove = Vector3.ClampMagnitude(worldMove, 1f) * _moveSpeed;
+		Vector3 worldMove = Vector3.zero;
+		if (_cam != null)
+		{
+			Vector3 camRight = _cam.transform.right;
+			camRight.y = 0;
+			camRight.Normalize();
 
+			Vector3 camForward = _cam.transform.forward;
+			camForward.y = 0;
+			camForward.Normalize();
+
+			worldMove = camRight * moveDir.x + camForward * moveDir.y;
+		}
+		else
+			worldMove = _cc.transform.right * moveDir.x + _cc.transform.forward * moveDir.y;
+
+		worldMove = Vector3.ClampMagnitude(worldMove, 1f) * _moveSpeed;
 		// Smooth acceleration.
 		_velocity.x = Mathf.MoveTowards(_velocity.x, worldMove.x, _acceleration * Time.fixedDeltaTime);
 		_velocity.z = Mathf.MoveTowards(_velocity.z, worldMove.z, _acceleration * Time.fixedDeltaTime);
