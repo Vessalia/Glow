@@ -620,7 +620,6 @@ GameObject:
   - component: {fileID: 1482673473}
   - component: {fileID: 1482673472}
   - component: {fileID: 1482673471}
-  - component: {fileID: 1482673470}
   - component: {fileID: 1482673469}
   m_Layer: 0
   m_Name: Enemy
@@ -644,26 +643,16 @@ MonoBehaviour:
   _chaseRange: 12
   _attackRange: 1.8
   _target: {fileID: 1693229693}
---- !u!114 &1482673470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482673468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdd0ff7bf3b501344958cde122d12eea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterMotor
-  _moveSpeed: 6
-  _acceleration: 20
-  _gravity: -20
-  _jumpHeight: 1.8
-  _jumpHoldBonus: 4
-  _jumpHoldMaxTime: 0.25
-  _lookSensitivity: 0.15
-  _cameraPivot: {fileID: 0}
+  _motor:
+    _moveSpeed: 8
+    _acceleration: 8
+    _gravity: -9.8
+    _jumpHeight: 0
+    _jumpHoldBonus: 0
+    _jumpHoldMaxTime: 0
+    _lookSensitivity: 0
+    _cameraPivot: {fileID: 0}
+    _cc: {fileID: 1482673471}
 --- !u!143 &1482673471
 CharacterController:
   m_ObjectHideFlags: 0
@@ -795,7 +784,6 @@ GameObject:
   - component: {fileID: 1693229691}
   - component: {fileID: 1693229690}
   - component: {fileID: 1693229689}
-  - component: {fileID: 1693229695}
   - component: {fileID: 1693229694}
   - component: {fileID: 1693229696}
   m_Layer: 0
@@ -939,27 +927,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481656194bb015d4d975558522df588a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  _input: {fileID: 11400000, guid: f336628d0e9cb674490253f17832419a, type: 2}
---- !u!114 &1693229695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1693229688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdd0ff7bf3b501344958cde122d12eea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterMotor
-  _moveSpeed: 6
-  _acceleration: 20
-  _gravity: -10
-  _jumpHeight: 1.8
-  _jumpHoldBonus: 4
-  _jumpHoldMaxTime: 0.25
-  _lookSensitivity: 0.15
-  _cameraPivot: {fileID: 330585546}
+  _motor:
+    _moveSpeed: 16
+    _acceleration: 32
+    _gravity: -9.8
+    _jumpHeight: 3
+    _jumpHoldBonus: 1
+    _jumpHoldMaxTime: 1
+    _lookSensitivity: 0
+    _cameraPivot: {fileID: 2089539298}
+    _cc: {fileID: 1693229689}
 --- !u!114 &1693229696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,7 +967,6 @@ MonoBehaviour:
   _defaultOffset: {x: 0.6, y: 0, z: -3}
   _aimOffset: {x: 0.3, y: 0, z: -1.5}
   _aimLerpSpeed: 10
-  _input: {fileID: 11400000, guid: f336628d0e9cb674490253f17832419a, type: 2}
 --- !u!1 &2049038019
 GameObject:
   m_ObjectHideFlags: 0

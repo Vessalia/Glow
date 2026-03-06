@@ -1,18 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterMotor))]
 public class EnemyController : MonoBehaviour
 {
 	[SerializeField] private float _chaseRange = 12f;
 	[SerializeField] private float _attackRange = 1.8f;
 	[SerializeField] private Transform _target;
 
+	[SerializeField]
 	private CharacterMotor _motor;
-
-	private void Awake()
-	{
-		_motor = GetComponent<CharacterMotor>();
-	}
 
 	private void Start()
 	{

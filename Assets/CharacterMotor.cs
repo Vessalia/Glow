@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 
-[RequireComponent(typeof(CharacterController))]
-public class CharacterMotor : MonoBehaviour
+[Serializable]
+public class CharacterMotor
 {
 	[Header("Movement")]
 	[SerializeField] private float _moveSpeed = 6f;
@@ -18,18 +19,13 @@ public class CharacterMotor : MonoBehaviour
 	[SerializeField] private float _lookSensitivity = 0.15f;
 	[SerializeField] private Transform _cameraPivot; // assign the camera's parent transform
 
+	[SerializeField]
 	private CharacterController _cc;
+
 	private Vector3 _velocity;          // accumulated velocity (world space)
 	private float _currentYVelocity;
 	private float _jumpHoldTimer;
 	private bool _isJumping;
-
-	// ── Unity lifecycle ────────────────────────────────────────────────────────
-
-	private void Awake()
-	{
-		_cc = GetComponent<CharacterController>();
-	}
 
 	// ── Public API ─────────────────────────────────────────────────────────────
 
@@ -51,7 +47,7 @@ public class CharacterMotor : MonoBehaviour
 		if (delta == Vector2.zero || _cameraPivot == null) return;
 
 		// Horizontal: rotate the whole character so movement stays relative.
-		transform.Rotate(Vector3.up, delta.x * _lookSensitivity, Space.World);
+		_cc.transform.Rotate(Vector3.up, delta.x * _lookSensitivity, Space.World);
 
 		// Vertical: tilt only the camera pivot, clamped to avoid flipping.
 		float pitch = _cameraPivot.localEulerAngles.x - delta.y * _lookSensitivity;
@@ -62,8 +58,8 @@ public class CharacterMotor : MonoBehaviour
 	private void HandleMovement(Vector2 moveDir)
 	{
 		// Build a world-space target velocity aligned to the character's facing.
-		Vector3 worldMove = transform.right * moveDir.x
-						  + transform.forward * moveDir.y;
+		Vector3 worldMove = _cc.transform.right * moveDir.x
+						  + _cc.transform.forward * moveDir.y;
 		worldMove = Vector3.ClampMagnitude(worldMove, 1f) * _moveSpeed;
 
 		// Smooth acceleration.
@@ -117,10 +113,10 @@ public class CharacterMotor : MonoBehaviour
 		if (!pressed) return;
 
 		// Simple sphere-cast for interactables in front of the player.
-		if (Physics.SphereCast(transform.position, 0.5f, transform.forward,
+		if (Physics.SphereCast(_cc.transform.position, 0.5f, _cc.transform.forward,
 							   out RaycastHit hit, 2f))
 		{
-			hit.collider.GetComponent<IInteractable>()?.Interact(gameObject);
+			hit.collider.GetComponent<IInteractable>()?.Interact(_cc.gameObject);
 		}
 	}
 

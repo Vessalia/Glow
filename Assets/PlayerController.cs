@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterMotor))]
 public class PlayerController : MonoBehaviour
 {
 	private ICharacterInputReader _input;
 
+	[SerializeField]
 	private CharacterMotor _motor;
 
 	// Persistent state — updated by events, consumed each FixedUpdate.
@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour
 
 	private void Awake()
 	{
-		_motor = GetComponent<CharacterMotor>();
 		_input = InputManager.Instance.GetPlayerInput();
 	}
 
