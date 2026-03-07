@@ -17,19 +17,19 @@ public class InputManager
 		}
 	}
 
-	private ICharacterInputReader _playerInput;
-	private IUIInputReader _uiInput;
+	private CharacterInputFacade _playerInput;
+	private UIInputFacade _uiInput;
 
 	public InputManager(ICharacterInputReader playerInput, IUIInputReader uiInput)
 	{
-		this._playerInput = playerInput;
-		this._uiInput = uiInput;
+		_playerInput = new(playerInput);
+		_uiInput = new(uiInput);
 
 		EnablePlayerInput();
 	}
 
-	public void SetPlayerInput(ICharacterInputReader playerInput) => _playerInput = playerInput;
-	public void SetUIInput(IUIInputReader uiInput) => _uiInput = uiInput;
+	public void SetPlayerInput(ICharacterInputReader playerInput) => _playerInput.Set(playerInput);
+	public void SetUIInput(IUIInputReader uiInput) => _uiInput.Set(uiInput);
 
 	public ICharacterInputReader GetPlayerInput() => _playerInput;
 	public IUIInputReader GetUIInput() => _uiInput;

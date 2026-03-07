@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour
 		if (_target == null)
 		{
 			var player = GameObject.FindGameObjectWithTag("Player");
-			_target = player.transform;
+			_target = player?.transform;
 		}
 	}
 

@@ -96,7 +96,8 @@ public class PlayerController : MonoBehaviour
 		_attackPressed = false;
 		_interactPressed = false;
 		_cycleTo = Cycle.None;
-	}
+		_lookInput = Vector2.zero;
+    }
 
 	// ── Event handlers ─────────────────────────────────────────────────────────
 

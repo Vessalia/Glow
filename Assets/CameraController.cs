@@ -1,6 +1,4 @@
 using UnityEngine;
-
-
 public class CameraController : MonoBehaviour
 {
 	[Header("Rig References")]
