@@ -1,19 +1,22 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 public class CameraController : MonoBehaviour
 {
 	[Header("Rig References")]
 	[SerializeField] private Transform _pivot;     // child of Player, yaws
 	[SerializeField] private Transform _arm;       // child of Pivot, pitches
-	[SerializeField] private Camera _camera;       // child of Socket
+	[SerializeField] private Camera _camera;       
 
 	[Header("Sensitivity")]
-	[SerializeField] private float _yawSensitivity = 0.15f;
-	[SerializeField] private float _pitchSensitivity = 0.15f;
-	[SerializeField] private bool _invertPitch = false;
+    [SerializeField] private float _mouseYawSensitivity = 0.15f;
+    [SerializeField] private float _mousePitchSensitivity = 0.15f;
+    [SerializeField] private float _gamepadYawSensitivity = 180f;
+    [SerializeField] private float _gamepadPitchSensitivity = 180f;
+    [SerializeField] private bool _invertPitch = false;
 
 	[Header("Pitch Limits")]
-	[SerializeField] private float _pitchMin = -40f;
-	[SerializeField] private float _pitchMax = 70f;
+	[SerializeField] private float _pitchMin = -30f;
+	[SerializeField] private float _pitchMax = 30f;
 
 
 	[Header("Look Target")]
@@ -26,8 +29,10 @@ public class CameraController : MonoBehaviour
 	private float _yaw;
 	private float _pitch;
 
-	// Whether the player is holding the aim button.
-	private bool _isAiming;
+    private Vector2 _lookInput;
+    private bool _isGamepad;
+    // Whether the player is holding the aim button.
+    private bool _isAiming;
 
 	// ── Public ─────────────────────────────────────────────────────────────────
 
@@ -56,9 +61,9 @@ public class CameraController : MonoBehaviour
 
 	public bool IsAiming => _isAiming;
 
-	// ── Lifecycle ──────────────────────────────────────────────────────────────
+    // ── Lifecycle ──────────────────────────────────────────────────────────────
 
-	private void Awake()
+    private void Awake()
 	{
 		// Initialise yaw from the character's current facing so the camera
 		// doesn't snap on the first frame.
@@ -84,32 +89,37 @@ public class CameraController : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		// Run in LateUpdate so the camera settles after the motor has moved.
-		ApplyRotation();
+		Vector2 sensitivity = GetSensitivity();
+
+        _yaw += _lookInput.x * sensitivity.x;
+        _pitch += _lookInput.y * sensitivity.y;
+        _pitch = Mathf.Clamp(_pitch, _pitchMin, _pitchMax);
+
+        ApplyRotation();
+    }
+
+	private Vector2 GetSensitivity()
+	{
+		return _isGamepad ? new Vector2(_gamepadYawSensitivity, (_invertPitch ? 1f : -1f) * _gamepadPitchSensitivity) * Time.deltaTime :
+							new Vector2(_mouseYawSensitivity, (_invertPitch ? 1f : -1f) * _mousePitchSensitivity);
 	}
 
 	// ── Private ────────────────────────────────────────────────────────────────
 
 	private void ApplyRotation()
 	{
-		// Pivot yaws in world space — it stays at the character's root position
-		// (parented to Player) so it automatically follows the character.
-		_pivot.rotation = Quaternion.Euler(0f, _yaw, 0f);
-
-		// Arm pitches in local space relative to the pivot.
-		_arm.localRotation = Quaternion.Euler(_pitch, 0f, 0f);
+		_pivot.localRotation = Quaternion.Euler(_pitch, _yaw, 0f);
 	}
 
 
-	// ── Input handlers ─────────────────────────────────────────────────────────
+    // ── Input handlers ─────────────────────────────────────────────────────────
 
-	private void OnLook(Vector2 delta)
-	{
-		_yaw += delta.x * _yawSensitivity;
-		_pitch += delta.y * _pitchSensitivity * (_invertPitch ? 1f : -1f);
-		_pitch = Mathf.Clamp(_pitch, _pitchMin, _pitchMax);
-	}
+    private void OnLook(Vector2 delta)
+    {
+        _lookInput = delta;
+        _isGamepad = InputSystem.GetDevice<Gamepad>()?.wasUpdatedThisFrame ?? false;
+    }
 
-	private void OnAimStarted() => _isAiming = true;
+    private void OnAimStarted() => _isAiming = true;
 	private void OnAimCancelled() => _isAiming = false;
 }

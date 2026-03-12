@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-	private ICharacterInputReader _input;
-
 	[SerializeField]
 	private CharacterMotor _motor;
 
@@ -26,51 +24,48 @@ public class PlayerController : MonoBehaviour
 
 	// ── Unity lifecycle ────────────────────────────────────────────────────────
 
-	private void Awake()
-	{
-		_input = InputManager.Instance.GetPlayerInput();
-	}
-
 	private void OnEnable()
 	{
-		_input.MoveEvent += OnMove;
-		_input.LookEvent += OnLook;
+		var input = InputManager.Instance.GetPlayerInput();
+        input.MoveEvent += OnMove;
+		input.LookEvent += OnLook;
 
-		_input.JumpStartedEvent += OnJumpStarted;
-		_input.JumpCancelledEvent += OnJumpCancelled;
+		input.JumpStartedEvent += OnJumpStarted;
+		input.JumpCancelledEvent += OnJumpCancelled;
 
-		_input.AttackStartedEvent += OnAttackStarted;
-		_input.AttackCancelledEvent += OnAttackCancelled;
+		input.AttackStartedEvent += OnAttackStarted;
+		input.AttackCancelledEvent += OnAttackCancelled;
 
-		_input.CrouchStartedEvent += OnCrouchStarted;
-		_input.CrouchCancelledEvent += OnCrouchCancelled;
+		input.CrouchStartedEvent += OnCrouchStarted;
+		input.CrouchCancelledEvent += OnCrouchCancelled;
 
-		_input.SprintStartedEvent += OnSprintStarted;
-		_input.SprintCancelledEvent += OnSprintCancelled;
+		input.SprintStartedEvent += OnSprintStarted;
+		input.SprintCancelledEvent += OnSprintCancelled;
 
-		_input.InteractEvent += OnInteract;
-		_input.CycleEvent += OnCycle;
+		input.InteractEvent += OnInteract;
+		input.CycleEvent += OnCycle;
 	}
 
 	private void OnDisable()
 	{
-		_input.MoveEvent -= OnMove;
-		_input.LookEvent -= OnLook;
+		var input = InputManager.Instance.GetPlayerInput();
+        input.MoveEvent -= OnMove;
+		input.LookEvent -= OnLook;
 
-		_input.JumpStartedEvent -= OnJumpStarted;
-		_input.JumpCancelledEvent -= OnJumpCancelled;
+		input.JumpStartedEvent -= OnJumpStarted;
+		input.JumpCancelledEvent -= OnJumpCancelled;
 
-		_input.AttackStartedEvent -= OnAttackStarted;
-		_input.AttackCancelledEvent -= OnAttackCancelled;
+		input.AttackStartedEvent -= OnAttackStarted;
+		input.AttackCancelledEvent -= OnAttackCancelled;
 
-		_input.CrouchStartedEvent -= OnCrouchStarted;
-		_input.CrouchCancelledEvent -= OnCrouchCancelled;
+		input.CrouchStartedEvent -= OnCrouchStarted;
+		input.CrouchCancelledEvent -= OnCrouchCancelled;
 
-		_input.SprintStartedEvent -= OnSprintStarted;
-		_input.SprintCancelledEvent -= OnSprintCancelled;
+		input.SprintStartedEvent -= OnSprintStarted;
+		input.SprintCancelledEvent -= OnSprintCancelled;
 
-		_input.InteractEvent -= OnInteract;
-		_input.CycleEvent -= OnCycle;
+		input.InteractEvent -= OnInteract;
+		input.CycleEvent -= OnCycle;
 	}
 
 	private void FixedUpdate()
@@ -96,7 +91,6 @@ public class PlayerController : MonoBehaviour
 		_attackPressed = false;
 		_interactPressed = false;
 		_cycleTo = Cycle.None;
-		_lookInput = Vector2.zero;
     }
 
 	// ── Event handlers ─────────────────────────────────────────────────────────

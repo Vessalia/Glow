@@ -205,13 +205,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: -1, z: -10}
+  m_LocalRotation: {x: 0.078459114, y: 0, z: 0, w: 0.99691737}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1113848989}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 9, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,7 +520,7 @@ Transform:
   m_GameObject: {fileID: 736730468}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -600,7 +600,7 @@ Transform:
   m_GameObject: {fileID: 1113848988}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -933,7 +933,7 @@ MonoBehaviour:
     _jumpHeight: 3
     _jumpHoldBonus: 1
     _jumpHoldMaxTime: 1
-    _cam: {fileID: 330585545}
+    _cam: {fileID: 330585546}
     _cc: {fileID: 1693229689}
 --- !u!114 &1693229696
 MonoBehaviour:
@@ -949,17 +949,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   _pivot: {fileID: 2089539298}
   _arm: {fileID: 1113848989}
-  _socket: {fileID: 0}
   _camera: {fileID: 330585545}
   _yawSensitivity: 0.15
   _pitchSensitivity: 0.15
+  _gamepadLookSpeed: 150
   _invertPitch: 0
-  _pitchMin: -40
-  _pitchMax: 70
-  _collisionRadius: 0.2
-  _collisionMask:
-    serializedVersion: 2
-    m_Bits: 0
+  _pitchMin: -30
+  _pitchMax: 30
   _lookTarget: {fileID: 736730469}
   _lookTargetDistance: 50
 --- !u!1 &2089539297

@@ -17,7 +17,7 @@ public class CharacterMotor
 	[SerializeField] private float _jumpHoldMaxTime = 0.25f;
 
 	[Header("Looking")]
-	[SerializeField] private Camera _cam;
+	[SerializeField] private Transform _cam;
 
 	[SerializeField]
 	private CharacterController _cc;
@@ -46,11 +46,11 @@ public class CharacterMotor
 		Vector3 worldMove = Vector3.zero;
 		if (_cam != null)
 		{
-			Vector3 camRight = _cam.transform.right;
+			Vector3 camRight = _cam.right;
 			camRight.y = 0;
 			camRight.Normalize();
 
-			Vector3 camForward = _cam.transform.forward;
+			Vector3 camForward = _cam.forward;
 			camForward.y = 0;
 			camForward.Normalize();
 
