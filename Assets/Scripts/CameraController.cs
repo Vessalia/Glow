@@ -1,11 +1,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 public class CameraController : MonoBehaviour
 {
 	[Header("Rig References")]
-	[SerializeField] private Transform _pivot;     // child of Player, yaws
-	[SerializeField] private Transform _arm;       // child of Pivot, pitches
-	[SerializeField] private Camera _camera;       
+	[SerializeField] private Transform _target;
+	[SerializeField] private Transform _pivot;
+	[SerializeField] private Transform _arm;       // child of Pivot
+	[SerializeField] private Transform _socket;    // child of Arm
+	[SerializeField] private Transform _camera;
+
+	public float cameraMoveSpeed = 5f;
+	public float cameraTurnSpeed = 10f;
 
 	[Header("Sensitivity")]
     [SerializeField] private float _mouseYawSensitivity = 0.15f;
@@ -36,6 +42,12 @@ public class CameraController : MonoBehaviour
 
 	// ── Public ─────────────────────────────────────────────────────────────────
 
+	public void Init()
+	{
+		_camera.position = _socket.position;
+		_camera.rotation = _socket.rotation;
+	}
+
 	/// World-space point the camera is looking at. Expose this so other systems
 	/// (enemy detection, aim reticle, hit-scan) can query it.
 	public Vector3 LookPoint
@@ -65,6 +77,7 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
 	{
+		Init();
 		// Initialise yaw from the character's current facing so the camera
 		// doesn't snap on the first frame.
 		_yaw = transform.eulerAngles.y;
@@ -87,10 +100,17 @@ public class CameraController : MonoBehaviour
 		_input.AimCancelledEvent -= OnAimCancelled;
 	}
 
-	private void LateUpdate()
-	{
-		Vector2 sensitivity = GetSensitivity();
+    private void Update()
+    {
+		_camera.SetPositionAndRotation(Vector3.Lerp(_camera.position, _socket.position, cameraMoveSpeed * Time.deltaTime), 
+									   Quaternion.Slerp(_camera.rotation, _socket.rotation, cameraTurnSpeed * Time.deltaTime));
+    }
 
+    private void LateUpdate()
+	{
+		transform.position = _target.position;
+
+		Vector2 sensitivity = GetSensitivity();
         _yaw += _lookInput.x * sensitivity.x;
         _pitch += _lookInput.y * sensitivity.y;
         _pitch = Mathf.Clamp(_pitch, _pitchMin, _pitchMax);

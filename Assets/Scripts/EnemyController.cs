@@ -20,15 +20,15 @@ public class EnemyController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		var intent = new CharacterIntent();
 		if (_target == null)
 		{
-			_motor.ApplyIntent(CharacterIntent.Idle);
+			_motor.ApplyIntent(intent);
 			return;
 		}
 
 		float dist = Vector3.Distance(transform.position, _target.position);
 
-		var intent = new CharacterIntent();
 
 		if (dist <= _attackRange)
 		{
@@ -36,13 +36,8 @@ public class EnemyController : MonoBehaviour
 		}
 		else if (dist <= _chaseRange)
 		{
-			// Move toward player in local space.
 			Vector3 toTarget = (_target.position - transform.position).normalized;
-			// Express in the motor's local frame (forward = +Z, right = +X).
-			intent.MoveDirection = new Vector2(
-				Vector3.Dot(toTarget, transform.right),
-				Vector3.Dot(toTarget, transform.forward)
-			);
+			intent.MoveDirection = new Vector2(toTarget.x, toTarget.z);
 		}
 
 		_motor.ApplyIntent(intent);

@@ -7,6 +7,7 @@ using UnityEngine;
 public class CharacterMotor
 {
 	[Header("Movement")]
+	[SerializeField] private float _turnSpeed = 1f;
 	[SerializeField] private float _moveSpeed = 6f;
 	[SerializeField] private float _acceleration = 20f;
 	[SerializeField] private float _gravity = -20f;
@@ -22,6 +23,8 @@ public class CharacterMotor
 	[SerializeField]
 	private CharacterController _cc;
 
+	private Vector3 _facing;
+
 	private Vector3 _velocity;          // accumulated velocity (world space)
 	private float _currentYVelocity;
 	private float _jumpHoldTimer;
@@ -33,9 +36,11 @@ public class CharacterMotor
 	public void ApplyIntent(CharacterIntent intent)
 	{
 		HandleMovement(intent.MoveDirection);
+		HandleRotation(intent.MoveDirection, intent.IsAiming);
 		HandleJump(intent.JumpPressed, intent.JumpHeld);
 		ApplyGravity();
 		ApplyVelocity();
+		ApplyRotation();
 		HandleInteract(intent.InteractPressed);
 	}
 
@@ -43,26 +48,50 @@ public class CharacterMotor
 
 	private void HandleMovement(Vector2 moveDir)
 	{
-		Vector3 worldMove = Vector3.zero;
+		Vector3 worldMove;
+
 		if (_cam != null)
 		{
-			Vector3 camRight = _cam.right;
-			camRight.y = 0;
-			camRight.Normalize();
-
-			Vector3 camForward = _cam.forward;
-			camForward.y = 0;
-			camForward.Normalize();
-
+			Vector3 camRight = _cam.right; camRight.y = 0; camRight.Normalize();
+			Vector3 camForward = _cam.forward; camForward.y = 0; camForward.Normalize();
 			worldMove = camRight * moveDir.x + camForward * moveDir.y;
 		}
 		else
-			worldMove = _cc.transform.right * moveDir.x + _cc.transform.forward * moveDir.y;
+		{
+			worldMove = new Vector3(moveDir.x, 0f, moveDir.y);
+		}
 
 		worldMove = Vector3.ClampMagnitude(worldMove, 1f) * _moveSpeed;
-		// Smooth acceleration.
 		_velocity.x = Mathf.MoveTowards(_velocity.x, worldMove.x, _acceleration * Time.fixedDeltaTime);
 		_velocity.z = Mathf.MoveTowards(_velocity.z, worldMove.z, _acceleration * Time.fixedDeltaTime);
+	}
+
+	private void HandleRotation(Vector2 moveDir, bool isAiming)
+	{
+		Vector3 worldDir;
+
+		if (isAiming && _cam != null)
+		{
+			Vector3 camForward = _cam.forward; camForward.y = 0; camForward.Normalize();
+			_facing = camForward;
+			return;
+		}
+
+		if (moveDir.sqrMagnitude < 0.01f) return;
+
+		if (_cam != null)
+		{
+			Vector3 camRight = _cam.right; camRight.y = 0; camRight.Normalize();
+			Vector3 camForward = _cam.forward; camForward.y = 0; camForward.Normalize();
+			worldDir = camRight * moveDir.x + camForward * moveDir.y;
+		}
+		else
+		{
+			worldDir = new Vector3(moveDir.x, 0f, moveDir.y);
+		}
+
+		if (worldDir.sqrMagnitude > 0.001f)
+			_facing = worldDir;
 	}
 
 	private void HandleJump(bool pressed, bool held)
@@ -104,6 +133,11 @@ public class CharacterMotor
 	private void ApplyVelocity()
 	{
 		_cc.Move(_velocity * Time.fixedDeltaTime);
+	}
+
+	private void ApplyRotation()
+	{
+		_cc.transform.rotation = Quaternion.Slerp(_cc.transform.rotation, Quaternion.LookRotation(_facing.normalized), _turnSpeed * Time.deltaTime);
 	}
 
 	private void HandleInteract(bool pressed)

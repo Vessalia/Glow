@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
 
 	private Cycle _cycleTo;       // one-frame
 
+	private bool _isAiming;
+
 	// ── Unity lifecycle ────────────────────────────────────────────────────────
 
 	private void OnEnable()
@@ -44,6 +46,9 @@ public class PlayerController : MonoBehaviour
 
 		input.InteractEvent += OnInteract;
 		input.CycleEvent += OnCycle;
+
+		input.AimStartedEvent += OnAimStarted;
+		input.AimCancelledEvent += OnAimCancelled;
 	}
 
 	private void OnDisable()
@@ -66,6 +71,9 @@ public class PlayerController : MonoBehaviour
 
 		input.InteractEvent -= OnInteract;
 		input.CycleEvent -= OnCycle;
+
+		input.AimStartedEvent -= OnAimStarted;
+		input.AimCancelledEvent -= OnAimCancelled;
 	}
 
 	private void FixedUpdate()
@@ -82,6 +90,7 @@ public class PlayerController : MonoBehaviour
 			IsSprinting = _isSprinting,
 			InteractPressed = _interactPressed,
 			CycleTo = _cycleTo,
+			IsAiming = _isAiming,
 		};
 
 		_motor.ApplyIntent(intent);
@@ -112,4 +121,7 @@ public class PlayerController : MonoBehaviour
 
 	private void OnInteract() => _interactPressed = true;
 	private void OnCycle(Cycle cycle) => _cycleTo = cycle;
+
+	private void OnAimStarted() => _isAiming = true;
+	private void OnAimCancelled() => _isAiming = false;
 }

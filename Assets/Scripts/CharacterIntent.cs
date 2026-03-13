@@ -24,5 +24,7 @@ public struct CharacterIntent
 	
 	public Cycle CycleTo;
 
+	public bool IsAiming;
+
 	public static readonly CharacterIntent Idle = new CharacterIntent();
 }
