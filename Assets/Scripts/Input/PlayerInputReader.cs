@@ -18,7 +18,6 @@ public class PlayerInputReader : ICharacterInputReader, GameInputActions.IPlayer
 	public event Action SprintCancelledEvent;
 	public event Action InteractEvent;
 	public event Action PauseEvent;
-	public event Action<Cycle> CycleEvent;
 
 	private Action OnEnable;
 	private Action OnDisable;
@@ -81,16 +80,6 @@ public class PlayerInputReader : ICharacterInputReader, GameInputActions.IPlayer
 	{
 		if (ctx.started) AimStartedEvent?.Invoke();
 		if (ctx.canceled) AimCancelledEvent?.Invoke();
-	}
-
-	public void OnPrevious(InputAction.CallbackContext ctx)
-	{
-		if (ctx.started) CycleEvent?.Invoke(Cycle.Prev);
-	}
-
-	public void OnNext(InputAction.CallbackContext ctx)
-	{
-		if (ctx.started) CycleEvent?.Invoke(Cycle.Next);
 	}
 
 	public void Enable() => OnEnable?.Invoke();

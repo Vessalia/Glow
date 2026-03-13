@@ -23,8 +23,7 @@ public interface ICharacterInputReader
 	
 	public event Action InteractEvent;
 	public event Action PauseEvent;
-	public event Action<Cycle> CycleEvent;
-
+	
 	public void Enable();
 	public void Disable();
 }

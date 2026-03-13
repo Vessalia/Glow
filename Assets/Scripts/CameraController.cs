@@ -14,11 +14,11 @@ public class CameraController : MonoBehaviour
 	public float cameraTurnSpeed = 10f;
 
 	[Header("Sensitivity")]
-    [SerializeField] private float _mouseYawSensitivity = 0.15f;
-    [SerializeField] private float _mousePitchSensitivity = 0.15f;
-    [SerializeField] private float _gamepadYawSensitivity = 180f;
-    [SerializeField] private float _gamepadPitchSensitivity = 180f;
-    [SerializeField] private bool _invertPitch = false;
+	[SerializeField] private float _mouseYawSensitivity = 0.15f;
+	[SerializeField] private float _mousePitchSensitivity = 0.15f;
+	[SerializeField] private float _gamepadYawSensitivity = 180f;
+	[SerializeField] private float _gamepadPitchSensitivity = 180f;
+	[SerializeField] private bool _invertPitch = false;
 
 	[Header("Pitch Limits")]
 	[SerializeField] private float _pitchMin = -30f;
@@ -35,10 +35,10 @@ public class CameraController : MonoBehaviour
 	private float _yaw;
 	private float _pitch;
 
-    private Vector2 _lookInput;
-    private bool _isGamepad;
-    // Whether the player is holding the aim button.
-    private bool _isAiming;
+	private Vector2 _lookInput;
+	private bool _isGamepad;
+	// Whether the player is holding the aim button.
+	private bool _isAiming;
 
 	// ── Public ─────────────────────────────────────────────────────────────────
 
@@ -73,9 +73,9 @@ public class CameraController : MonoBehaviour
 
 	public bool IsAiming => _isAiming;
 
-    // ── Lifecycle ──────────────────────────────────────────────────────────────
+	// ── Lifecycle ──────────────────────────────────────────────────────────────
 
-    private void Awake()
+	private void Awake()
 	{
 		Init();
 		// Initialise yaw from the character's current facing so the camera
@@ -100,23 +100,23 @@ public class CameraController : MonoBehaviour
 		_input.AimCancelledEvent -= OnAimCancelled;
 	}
 
-    private void Update()
-    {
+	private void Update()
+	{
 		_camera.SetPositionAndRotation(Vector3.Lerp(_camera.position, _socket.position, cameraMoveSpeed * Time.deltaTime), 
 									   Quaternion.Slerp(_camera.rotation, _socket.rotation, cameraTurnSpeed * Time.deltaTime));
-    }
+	}
 
-    private void LateUpdate()
+	private void LateUpdate()
 	{
 		transform.position = _target.position;
 
 		Vector2 sensitivity = GetSensitivity();
-        _yaw += _lookInput.x * sensitivity.x;
-        _pitch += _lookInput.y * sensitivity.y;
-        _pitch = Mathf.Clamp(_pitch, _pitchMin, _pitchMax);
+		_yaw += _lookInput.x * sensitivity.x;
+		_pitch += _lookInput.y * sensitivity.y;
+		_pitch = Mathf.Clamp(_pitch, _pitchMin, _pitchMax);
 
-        ApplyRotation();
-    }
+		ApplyRotation();
+	}
 
 	private Vector2 GetSensitivity()
 	{
@@ -132,14 +132,14 @@ public class CameraController : MonoBehaviour
 	}
 
 
-    // ── Input handlers ─────────────────────────────────────────────────────────
+	// ── Input handlers ─────────────────────────────────────────────────────────
 
-    private void OnLook(Vector2 delta)
-    {
-        _lookInput = delta;
-        _isGamepad = InputSystem.GetDevice<Gamepad>()?.wasUpdatedThisFrame ?? false;
-    }
+	private void OnLook(Vector2 delta)
+	{
+		_lookInput = delta;
+		_isGamepad = InputSystem.GetDevice<Gamepad>()?.wasUpdatedThisFrame ?? false;
+	}
 
-    private void OnAimStarted() => _isAiming = true;
+	private void OnAimStarted() => _isAiming = true;
 	private void OnAimCancelled() => _isAiming = false;
 }

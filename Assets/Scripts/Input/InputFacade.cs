@@ -19,7 +19,6 @@ public class CharacterInputFacade : ICharacterInputReader
 	public event Action SprintCancelledEvent;
 	public event Action InteractEvent;
 	public event Action PauseEvent;
-	public event Action<Cycle> CycleEvent;
 
 	public CharacterInputFacade(ICharacterInputReader reader)
 	{
@@ -50,7 +49,6 @@ public class CharacterInputFacade : ICharacterInputReader
 		reader.SprintCancelledEvent += OnSprintCancelled;
 		reader.InteractEvent += OnInteract;
 		reader.PauseEvent += OnPause;
-		reader.CycleEvent += OnCycle;
 	}
 
 	private void UnsubscribeAll(ICharacterInputReader reader)
@@ -69,7 +67,6 @@ public class CharacterInputFacade : ICharacterInputReader
 		reader.SprintCancelledEvent -= OnSprintCancelled;
 		reader.InteractEvent -= OnInteract;
 		reader.PauseEvent -= OnPause;
-		reader.CycleEvent -= OnCycle;
 	}
 
 	private void OnMove(Vector2 v) => MoveEvent?.Invoke(v);
@@ -86,7 +83,6 @@ public class CharacterInputFacade : ICharacterInputReader
 	private void OnSprintCancelled() => SprintCancelledEvent?.Invoke();
 	private void OnInteract() => InteractEvent?.Invoke();
 	private void OnPause() => PauseEvent?.Invoke();
-	private void OnCycle(Cycle c) => CycleEvent?.Invoke(c);
 
 	public void Enable() => _reader.Enable();
 	public void Disable() => _reader.Disable();
