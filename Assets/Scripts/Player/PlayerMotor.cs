@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Player
@@ -38,7 +39,7 @@ namespace Assets.Scripts.Player
 
 		public bool IsGrounded { get; private set; }
 
-		public void Tick(PlayerIntent intent, CharacterController cc)
+		public void Tick(PlayerIntent intent, CharacterController cc, Animator animator)
 		{
 			Vector2 moveInput = intent.Move;
 			bool jumpPressed = intent.Jump;
@@ -53,6 +54,15 @@ namespace Assets.Scripts.Player
 			velocity = new Vector3(velocityXZ.x, velocity.y, velocityXZ.y);
 			cc.Move(velocity * Time.deltaTime);
 			IsGrounded = cc.isGrounded;
+
+			UpdateAnimator(animator);
+		}
+
+		private void UpdateAnimator(Animator animator)
+		{
+			animator.SetFloat("Speed", velocity.xz().magnitude);
+			animator.SetFloat("DirectionX", velocity.normalized.x);
+			animator.SetFloat("DirectionZ", velocity.normalized.z);
 		}
 
 		private Vector3 CalculateMoveDirection(Vector2 moveInput)

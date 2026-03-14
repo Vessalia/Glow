@@ -19,7 +19,7 @@ namespace Assets.Scripts.Player
 		void Update()
 		{
 			intent.Tick();
-			motor.Tick(intent, cc);
+			motor.Tick(intent, cc, animator);
 			intent.LateTick();
 		}
 
