@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 public class InputManager
 {
 	private static GameInputActions _actions;
@@ -26,6 +28,8 @@ public class InputManager
 		_uiInput = new(uiInput);
 
 		EnablePlayerInput();
+		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	public void SetPlayerInput(ICharacterInputReader playerInput) => _playerInput.Set(playerInput);
