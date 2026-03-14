@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Camera))]
-[ExecuteInEditMode]
+[ExecuteAlways]
 public class OrbitCamera : MonoBehaviour
 {
 	[SerializeField]

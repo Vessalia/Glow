@@ -56,7 +56,7 @@ namespace Assets.Scripts.Player
 			velocity = new Vector3(velocityXZ.x, velocity.y, velocityXZ.y);
 			IsGrounded = cc.isGrounded;
 
-			UpdateAnimator(animator, intent.RunHeld);
+			UpdateAnimator(animator, intent.RunHeld, intent.LanternRaised);
 		}
 
 		public void FixedTick(CharacterController cc)
@@ -64,12 +64,13 @@ namespace Assets.Scripts.Player
 			cc.Move(velocity * Time.fixedDeltaTime);
 		}
 
-		private void UpdateAnimator(Animator animator, bool isRunning)
+		private void UpdateAnimator(Animator animator, bool isRunning, bool lanternRaised)
 		{
 			animator.SetFloat("Speed", velocity.xz().magnitude);
-			animator.SetFloat("DirectionX", velocity.normalized.x);
-			animator.SetFloat("DirectionZ", velocity.normalized.z);
 			animator.SetBool("IsRunning", isRunning);
+
+			int lanternLayer = animator.GetLayerIndex("Lantern");
+			animator.SetBool("IsLanternRaised", lanternRaised);
 		}
 
 		private Vector3 CalculateMoveDirection(Vector2 moveInput)

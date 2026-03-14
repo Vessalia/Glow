@@ -13,6 +13,8 @@ namespace Assets.Scripts.Player
 		public bool Jump { get; private set; }
 		public bool JumpHeld { get; private set; }
 
+		public bool LanternRaised { get; private set; }
+
 		public bool CanUseCoyote => coyoteTimer > 0f;
 
 		private PlayerMotor motor;
@@ -35,6 +37,8 @@ namespace Assets.Scripts.Player
 			_input.LookEvent += OnLook;
 			_input.SprintStartedEvent += OnRunStart;
 			_input.SprintCancelledEvent += OnRunEnd;
+			_input.AimStartedEvent += RaiseLantern;
+			_input.AimCancelledEvent += LowerLantern;
 		}
 
 		~PlayerIntent() => Dispose();
@@ -108,5 +112,8 @@ namespace Assets.Scripts.Player
 
 		private void OnRunStart() => RunHeld = true;
 		private void OnRunEnd() => RunHeld = false;
+
+		private void RaiseLantern() => LanternRaised = true;
+		private void LowerLantern() => LanternRaised = false;
 	}
 }

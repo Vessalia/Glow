@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts
 {
-	[ExecuteInEditMode]
+	[ExecuteAlways]
 	public class CameraTarget : MonoBehaviour
 	{
 
