@@ -8,6 +8,8 @@ namespace Assets.Scripts.Player
 		public Vector2 Move { get; private set; }
 		public Vector2 Look { get; private set; }
 
+		public bool RunHeld { get; private set; }
+
 		public bool Jump { get; private set; }
 		public bool JumpHeld { get; private set; }
 
@@ -31,6 +33,8 @@ namespace Assets.Scripts.Player
 			var _input = InputManager.Instance.GetPlayerInput();
 			_input.MoveEvent += OnMove;
 			_input.LookEvent += OnLook;
+			_input.SprintStartedEvent += OnRunStart;
+			_input.SprintCancelledEvent += OnRunEnd;
 		}
 
 		~PlayerIntent() => Dispose();
@@ -40,6 +44,8 @@ namespace Assets.Scripts.Player
 			var _input = InputManager.Instance.GetPlayerInput();
 			_input.MoveEvent -= OnMove;
 			_input.LookEvent -= OnLook;
+			_input.SprintStartedEvent -= OnRunStart;
+			_input.SprintCancelledEvent -= OnRunEnd;
 		}
 
 		public void Tick()
@@ -99,5 +105,8 @@ namespace Assets.Scripts.Player
 
 		private void OnMove(Vector2 move) => Move = move;
 		private void OnLook(Vector2 look) => Look = look;
+
+		private void OnRunStart() => RunHeld = true;
+		private void OnRunEnd() => RunHeld = false;
 	}
 }

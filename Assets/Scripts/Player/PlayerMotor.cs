@@ -27,6 +27,8 @@ namespace Assets.Scripts.Player
 		public float MovementSpeed = 6f;
 		public float RotationSpeed = 720f;
 
+		public float WalkSpeed => MovementSpeed / 2f;
+
 		[SerializeField]
 		[Range(0.5f, 10f)]
 		public float fallGravityScalar = 1f;  // how intense we want gravity to scale once we are past the peak of the jump
@@ -48,13 +50,13 @@ namespace Assets.Scripts.Player
 			ResolveVerticalVelocity(jumpPressed, intent);
 
 			Vector2 velocityXZ = velocity.xz();
-			velocityXZ = ResolveHorizontalVelocity(moveDir, moveInput, velocityXZ);
+			velocityXZ = ResolveHorizontalVelocity(intent.RunHeld, moveDir, moveInput, velocityXZ);
 			ResolveRotation(moveDir, cc.transform);
 
 			velocity = new Vector3(velocityXZ.x, velocity.y, velocityXZ.y);
 			IsGrounded = cc.isGrounded;
 
-			UpdateAnimator(animator);
+			UpdateAnimator(animator, intent.RunHeld);
 		}
 
 		public void FixedTick(CharacterController cc)
@@ -62,11 +64,12 @@ namespace Assets.Scripts.Player
 			cc.Move(velocity * Time.fixedDeltaTime);
 		}
 
-		private void UpdateAnimator(Animator animator)
+		private void UpdateAnimator(Animator animator, bool isRunning)
 		{
 			animator.SetFloat("Speed", velocity.xz().magnitude);
 			animator.SetFloat("DirectionX", velocity.normalized.x);
 			animator.SetFloat("DirectionZ", velocity.normalized.z);
+			animator.SetBool("IsRunning", isRunning);
 		}
 
 		private Vector3 CalculateMoveDirection(Vector2 moveInput)
@@ -115,21 +118,21 @@ namespace Assets.Scripts.Player
 			}
 		}
 
-		private Vector2 ResolveHorizontalVelocity(Vector3 moveDir, Vector2 moveInput, Vector2 velocityXZ)
+		private Vector2 ResolveHorizontalVelocity(bool isRunning, Vector3 moveDir, Vector2 moveInput, Vector2 velocityXZ)
 		{
-			velocityXZ = ApplyGroundMovement(moveDir, velocityXZ);
-			velocityXZ = Vector3.ClampMagnitude(velocityXZ, moveInput.magnitude * MovementSpeed);
+			float effectiveMovementSpeed = isRunning ? MovementSpeed : WalkSpeed;
+
+			velocityXZ = ApplyGroundMovement(moveDir, velocityXZ, effectiveMovementSpeed);
+			velocityXZ = Vector3.ClampMagnitude(velocityXZ, moveInput.magnitude * effectiveMovementSpeed);
 
 			return velocityXZ;
 		}
 
-		private Vector2 ApplyGroundMovement(Vector3 moveDir, Vector2 velocityXZ)
+		private Vector2 ApplyGroundMovement(Vector3 moveDir, Vector2 velocityXZ, float effectiveMovementSpeed)
 		{
 			if (moveDir.sqrMagnitude > 0f)
 			{
-				float magnitude = velocityXZ.magnitude;
-				magnitude += Acceleration * Time.deltaTime;
-				velocityXZ = moveDir.xz() * magnitude;
+				velocityXZ = Vector2.MoveTowards(velocityXZ, moveDir.xz() * effectiveMovementSpeed, Acceleration * Time.deltaTime);
 			}
 			else
 			{
