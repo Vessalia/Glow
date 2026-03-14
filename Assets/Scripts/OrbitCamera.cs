@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Camera))]
-[ExecuteAlways]
 public class OrbitCamera : MonoBehaviour
 {
 	[SerializeField]
@@ -112,7 +111,7 @@ public class OrbitCamera : MonoBehaviour
 			desiredDistance = Vector3.Distance(focusPoint, clippedLookPosition);
 		}
 
-		float t = 1f - Mathf.Exp(-zoomLerpSpeed * Time.unscaledDeltaTime);
+		float t = 1f - Mathf.Exp(-zoomLerpSpeed * Time.deltaTime);
 		currentDistance = Mathf.Lerp(currentDistance, desiredDistance, t);
 
 		Vector3 finalLookPosition = focusPoint - lookDirection * currentDistance;
@@ -127,8 +126,8 @@ public class OrbitCamera : MonoBehaviour
 		const float e = 0.001f;
 		if (input.x < -e || input.x > e || input.y < -e || input.y > e)
 		{
-			orbitAngles += rotationSpeed * Time.unscaledDeltaTime * input;
-			lastManualRotationTime = Time.unscaledTime;
+			orbitAngles += rotationSpeed * Time.deltaTime * input;
+			lastManualRotationTime = Time.deltaTime;
 			return true;
 		}
 		return false;
@@ -136,7 +135,7 @@ public class OrbitCamera : MonoBehaviour
 
 	bool AutomaticRotation()
 	{
-		if (Time.unscaledTime - lastManualRotationTime < alignDelay)
+		if (Time.time - lastManualRotationTime < alignDelay)
 			return false;
 
 		var movement = new Vector2(
@@ -149,7 +148,7 @@ public class OrbitCamera : MonoBehaviour
 
 		float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
 		float deltaAbs = Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
-		float rotationChange = rotationSpeed * Mathf.Min(Time.unscaledDeltaTime, movementDeltaSqr);
+		float rotationChange = rotationSpeed * Mathf.Min(Time.deltaTime, movementDeltaSqr);
 
 		if (deltaAbs < alignSmoothRange)
 			rotationChange *= deltaAbs / alignSmoothRange;

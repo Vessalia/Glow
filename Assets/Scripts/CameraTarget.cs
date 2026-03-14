@@ -2,10 +2,8 @@
 
 namespace Assets.Scripts
 {
-	[ExecuteAlways]
 	public class CameraTarget : MonoBehaviour
 	{
-
 		[SerializeField] private Transform _root;
 		[SerializeField] private Vector3 _offset;
 

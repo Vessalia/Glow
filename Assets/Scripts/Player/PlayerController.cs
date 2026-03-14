@@ -23,11 +23,6 @@ namespace Assets.Scripts.Player
 			intent.LateTick();
 		}
 
-		private void FixedUpdate()
-		{
-			motor.FixedTick(cc);
-		}
-
 		void OnDestroy()
 		{
 			intent.Dispose();

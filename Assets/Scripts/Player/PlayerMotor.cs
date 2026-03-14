@@ -57,11 +57,7 @@ namespace Assets.Scripts.Player
 			IsGrounded = cc.isGrounded;
 
 			UpdateAnimator(animator, intent.RunHeld, intent.LanternRaised);
-		}
-
-		public void FixedTick(CharacterController cc)
-		{
-			cc.Move(velocity * Time.fixedDeltaTime);
+			cc.Move(velocity * Time.deltaTime);
 		}
 
 		private void UpdateAnimator(Animator animator, bool isRunning, bool lanternRaised)
