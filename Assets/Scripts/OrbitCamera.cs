@@ -1,13 +1,15 @@
+using Assets.Scripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Camera))]
+[ExecuteInEditMode]
 public class OrbitCamera : MonoBehaviour
 {
 	[SerializeField]
-	private Transform target = default;
+	private CameraTarget target = default;
 
-	[SerializeField, Range(1f, 20f)]
+	[SerializeField, Range(0f, 20f)]
 	private float distance = 5f;
 
 	[SerializeField, Range(0.1f, 20f)]
@@ -57,7 +59,7 @@ public class OrbitCamera : MonoBehaviour
 
 	void Start()
 	{
-		focusPoint = target.position;
+		focusPoint = target.WorldPosition;
 		transform.localRotation = Quaternion.Euler(orbitAngles);
 
 		cam = GetComponent<Camera>();
@@ -97,7 +99,7 @@ public class OrbitCamera : MonoBehaviour
 
 		Vector3 rectOffset = lookDirection * cam.nearClipPlane;
 		Vector3 rectPosition = idealLookPosition + rectOffset;
-		Vector3 castFrom = target.position;
+		Vector3 castFrom = target.WorldPosition;
 		Vector3 castLine = rectPosition - castFrom;
 		float castDistance = castLine.magnitude;
 		Vector3 castDirection = castLine / castDistance;
@@ -164,7 +166,7 @@ public class OrbitCamera : MonoBehaviour
 		float effectiveFocusCentering = Mathf.Clamp01(focusCentering * (isAttacking ? 1.5f : 1.0f));
 
 		previousFocusPoint = focusPoint;
-		Vector3 targetPoint = target.position;
+		Vector3 targetPoint = target.WorldPosition;
 		if (effectiveFocusRadius > 0f)
 		{
 			float distance = Vector3.Distance(targetPoint, focusPoint);

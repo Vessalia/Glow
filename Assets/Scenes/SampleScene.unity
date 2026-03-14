@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -178,9 +179,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
-  field of view: 60
+  field of view: 45
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -206,8 +207,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.38268346, y: 0, z: 0, w: 0.9238795}
+  m_LocalPosition: {x: 0.2, y: 1.0965443, z: -0.7071067}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -269,16 +270,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bdcd7defd565447b2c56df5161e7d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrbitCamera
-  target: {fileID: 1693229693}
-  distance: 5
-  zoomLerpSpeed: 8
-  focusRadius: 1
+  target: {fileID: 2097882645}
+  distance: 1
+  zoomLerpSpeed: 10
+  focusRadius: 0.2
   focusCentering: 0.5
-  rotationSpeed: 90
+  rotationSpeed: 10
   minVerticalAngle: -30
-  maxVerticalAngle: 60
-  alignDelay: 5
-  alignSmoothRange: 45
+  maxVerticalAngle: 70
+  alignDelay: 0.1
+  alignSmoothRange: 60
+--- !u!54 &330585549
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,6 +738,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7788041948959647517, guid: c2067b698172e084881a5e6abe8b7126, type: 3}
   m_PrefabInstance: {fileID: 9092485036775942083}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2097882643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2097882644}
+  - component: {fileID: 2097882645}
+  m_Layer: 0
+  m_Name: Camera Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2097882644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097882643}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2097882645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097882643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ebd618e6bc9834a840510a109949be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.CameraTarget
+  _root: {fileID: 1693229693}
+  _offset: {x: 0.2, y: 0.4, z: 0}
 --- !u!1001 &9092485036775942083
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -718,6 +792,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4982150608427096616, guid: c2067b698172e084881a5e6abe8b7126, type: 3}
+      propertyPath: motor.RotationSpeed
+      value: 360
+      objectReference: {fileID: 0}
     - target: {fileID: 4982150608427096616, guid: c2067b698172e084881a5e6abe8b7126, type: 3}
       propertyPath: motor.cameraTransform
       value: 
@@ -781,3 +859,4 @@ SceneRoots:
   - {fileID: 9092485036775942083}
   - {fileID: 428619282}
   - {fileID: 1482673475}
+  - {fileID: 2097882644}

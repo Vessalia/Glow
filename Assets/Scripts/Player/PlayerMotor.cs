@@ -52,10 +52,14 @@ namespace Assets.Scripts.Player
 			ResolveRotation(moveDir, cc.transform);
 
 			velocity = new Vector3(velocityXZ.x, velocity.y, velocityXZ.y);
-			cc.Move(velocity * Time.deltaTime);
 			IsGrounded = cc.isGrounded;
 
 			UpdateAnimator(animator);
+		}
+
+		public void FixedTick(CharacterController cc)
+		{
+			cc.Move(velocity * Time.fixedDeltaTime);
 		}
 
 		private void UpdateAnimator(Animator animator)
@@ -86,10 +90,10 @@ namespace Assets.Scripts.Player
 		{
 			float effectiveRotationSpeed = RotationSpeed;
 
-			if (moveDir.sqrMagnitude <= 0.001f)
-				return;
-
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDir), effectiveRotationSpeed * Time.deltaTime);
+			if (moveDir.sqrMagnitude > 0.001f)
+			{
+				transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDir), effectiveRotationSpeed * Time.deltaTime);
+			}
 		}
 
 		private void ResolveVerticalVelocity(bool jumpPressed, PlayerIntent intent)
