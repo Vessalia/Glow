@@ -32,6 +32,8 @@ public class OrbitCamera : MonoBehaviour
 	[SerializeField, Range(0f, 90f)]
 	private float alignSmoothRange = 45f;
 
+	[SerializeField] private bool invertPitch;
+
 	private Vector3 focusPoint, previousFocusPoint;
 
 	private float lastManualRotationTime;
@@ -121,7 +123,7 @@ public class OrbitCamera : MonoBehaviour
 	bool ManualRotation()
 	{
 		Vector2 rawInput = InputSystem.actions.FindAction("Look").ReadValue<Vector2>();
-		var input = new Vector2(rawInput.y, rawInput.x);
+		var input = new Vector2(invertPitch ? 1 : -1 * rawInput.y, rawInput.x);
 
 		const float e = 0.001f;
 		if (input.x < -e || input.x > e || input.y < -e || input.y > e)
