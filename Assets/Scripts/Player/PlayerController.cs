@@ -35,8 +35,8 @@ namespace Assets.Scripts.Player
 			{
 				var pos = Vector3.zero;
 				pos.z = _lanternInteractionRange / 2;
-				_lanternInteraction.transform.position = pos;
-				_lanternInteraction.transform.localScale = new Vector3(_lanternInteractionRange, 1, 1);
+				_lanternInteraction.transform.localPosition = pos;
+				_lanternInteraction.transform.localScale = new Vector3(1, 1, _lanternInteractionRange);
 			}
 		}
 
