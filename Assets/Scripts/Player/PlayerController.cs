@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Mono.Cecil.Cil;
+using UnityEngine;
 using UnityEngine.UIElements.Experimental;
 
 namespace Assets.Scripts.Player
@@ -21,7 +22,23 @@ namespace Assets.Scripts.Player
 
 		[SerializeField, Min(0f)] private float _lanternIntensityTime;
 
+		[SerializeField, Range(1f, 10f)] private float _lanternInteractionRange;
+
+		[SerializeField] private Collider _lanternInteraction;
+
+
 		private float _lanternIntensityTimer = 0;
+
+		private void OnValidate()
+		{
+			if (_lanternInteraction != null)
+			{
+				var pos = Vector3.zero;
+				pos.z = _lanternInteractionRange / 2;
+				_lanternInteraction.transform.position = pos;
+				_lanternInteraction.transform.localScale = new Vector3(_lanternInteractionRange, 1, 1);
+			}
+		}
 
 		void Awake()
 		{
@@ -50,6 +67,11 @@ namespace Assets.Scripts.Player
 
 			_lanternLight.intensity = Mathf.Lerp(_lanternIntensityMin, _lanternIntensityMax, t);
 			_lanternLight.range = Mathf.Lerp(_lanternDistanceMin, _lanternDistanceMax, t);
+
+			if (t >= 1 && !_lanternInteraction.gameObject.activeSelf)
+				_lanternInteraction.gameObject.SetActive(true);
+			else if (t < 1 && _lanternInteraction.gameObject.activeSelf)
+				_lanternInteraction.gameObject.SetActive(false);
 		}
 
 		void OnDestroy()
